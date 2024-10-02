@@ -8,8 +8,8 @@ defineProps({
 
 
 <template>
-  <div class="d-flex justify-content-between rounded border border-dark border-3 shadow">
-    <div class="d-flex p-3 flex-column flex-grow-1">
+  <div class="d-md-flex p-3 justify-content-between rounded border border-dark border-3 shadow">
+    <div class="d-flex  flex-column flex-grow-1">
       <div class="d-flex align-items-center gap-1 mb-1">
         <img :src="blog.creator.picture" :alt="`${blog.creator.name}'s profile picture'`" class="creator-img">
         <span>{{ blog.creator.name }}</span>
@@ -18,7 +18,7 @@ defineProps({
       <p class="ellipsis">{{ blog.body }}</p>
       <time :datetime="blog.createdAt.toLocaleDateString()">{{ blog.createdAt.toLocaleDateString() }}</time>
     </div>
-    <img :src="blog.imgUrl" :alt="blog.title" class="blog-img rounded m-3">
+    <img :src="blog.imgUrl" :alt="blog.title" class="blog-img rounded ms-md-3">
   </div>
 </template>
 
@@ -32,7 +32,7 @@ defineProps({
 }
 
 .blog-img {
-  width: 20%;
+  width: 100%;
   aspect-ratio: 16/9;
   object-fit: cover;
 }
@@ -45,5 +45,11 @@ defineProps({
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+@media screen and (min-width: 768px) {
+  .blog-img {
+    width: 20%;
+  }
 }
 </style>
