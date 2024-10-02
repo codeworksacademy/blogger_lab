@@ -10,8 +10,8 @@ import { useRoute } from 'vue-router';
 
 const route = useRoute()
 const profile = computed(() => AppState.profile)
-const account = computed(() => AppState.account)
 const blogs = computed(() => AppState.blogs)
+const yourProfilePage = computed(() => profile.value?.id == AppState.account?.id)
 
 watch(() => route.params.profileId, () => {
   getProfileById()
@@ -49,12 +49,14 @@ async function getBlogsByProfileId() {
           <img :src="profile.picture" :alt="profile.name" class="profile-img">
           <div class="d-flex gap-4 align-items-center">
             <h1>{{ profile.name }}</h1>
-            <button v-if="account?.id == profile.id" class="btn btn-warning fs-2" type="button"
-              title="Edit your profile">
+            <button v-if="yourProfilePage" class="btn btn-warning px-4 fs-3" type="button" title="Edit your profile">
               <i class="mdi mdi-pen"></i>
             </button>
           </div>
         </div>
+        <button v-if="yourProfilePage" class="btn btn-warning px-4 fs-3 mt-2" type="button" title="Edit your profile">
+          <i class="mdi mdi-plus-thick"></i>
+        </button>
       </div>
     </div>
     <div v-else class="row mb-4">
