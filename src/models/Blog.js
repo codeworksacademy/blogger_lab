@@ -8,6 +8,7 @@ export class Blog {
     this.imgUrl = data.imgUrl
     this.tags = data.tags
     this.published = data.published
+    this.creatorId = data.creatorId
     this.creator = new Account(data.creator)
     this.createdAt = new Date(data.createdAt)
     this.updatedAt = new Date(data.updatedAt)
