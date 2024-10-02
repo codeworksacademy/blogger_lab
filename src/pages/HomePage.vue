@@ -1,9 +1,11 @@
 <script setup>
+import { AppState } from '@/AppState.js';
 import { blogsService } from '@/services/BlogsService.js';
 import { logger } from '@/utils/Logger.js';
 import Pop from '@/utils/Pop.js';
-import { onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 
+const blogs = computed(() => AppState.blogs)
 
 onMounted(() => {
   getBlogs()
@@ -20,7 +22,13 @@ async function getBlogs() {
 </script>
 
 <template>
-  <div></div>
+  <div class="container-fluid">
+    <div class="row">
+      <div v-for="blog in blogs" :key="blog.id" class="col-12 mb-4">
+        {{ blog.title }}
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss"></style>
