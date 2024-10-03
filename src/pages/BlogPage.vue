@@ -48,10 +48,16 @@ async function getCommentsByBlogId() {
         <div class="rounded border border-dark border-3 px-5 py-4">
           <img :src="blog.imgUrl" :alt="'Cover image for ' + blog.title" class="blog-img rounded mb-2">
           <div class="d-flex gap-4 align-items-start mb-3">
-            <ProfilePicture width="10rem" :profile="blog.creator" />
+            <RouterLink :to="{ name: 'Profile Details', params: { profileId: blog.creatorId } }"
+              :title="`Go to ${blog.creator.name}'s profile page`">
+              <ProfilePicture width="10rem" :profile="blog.creator" />
+            </RouterLink>
             <div class="flex-grow-1">
               <h1>{{ blog.title }}</h1>
-              <h2 class="fs-4">by {{ blog.creator.name }}</h2>
+              <RouterLink :to="{ name: 'Profile Details', params: { profileId: blog.creatorId } }"
+                :title="`Go to ${blog.creator.name}'s profile page`">
+                <h2 class="fs-4">by {{ blog.creator.name }}</h2>
+              </RouterLink>
               <h3 class="fs-4">Last updated:
                 <time :datetime="blog.updatedAt.toLocaleDateString()">
                   {{ blog.updatedAt.toLocaleDateString() }}
@@ -77,7 +83,7 @@ async function getCommentsByBlogId() {
           </button>
         </div>
       </div>
-      <div v-for="comment in comments" :key="comment.id" class="col-12">
+      <div v-for="comment in comments" :key="comment.id" class="col-12 mb-3">
         <CommentCard :comment="comment" />
       </div>
     </section>

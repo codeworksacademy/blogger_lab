@@ -1,6 +1,8 @@
 <script setup>
 import { AppState } from '@/AppState.js';
 import BlogCard from '@/components/BlogCard.vue';
+import ModalWrapper from '@/components/ModalWrapper.vue';
+import ProfileForm from '@/components/ProfileForm.vue';
 import ProfilePicture from '@/components/ProfilePicture.vue';
 import { blogsService } from '@/services/BlogsService.js';
 import { profilesService } from '@/services/ProfilesService.js';
@@ -12,7 +14,7 @@ import { useRoute } from 'vue-router';
 const route = useRoute()
 const profile = computed(() => AppState.profile)
 const blogs = computed(() => AppState.blogs)
-const yourProfilePage = computed(() => profile.value?.id == AppState.account?.id)
+const isYourProfilePage = computed(() => profile.value?.id == AppState.account?.id)
 
 watch(() => route.params.profileId, () => {
   getProfileById()
@@ -46,16 +48,22 @@ async function getBlogsByProfileId() {
   <div class="container">
     <div v-if="profile" class="row mb-4">
       <div class="col-12">
-        <div class="d-flex gap-5 align-items-start">
-          <ProfilePicture width="20rem" :profile="profile" />
-          <div class="d-flex gap-4 align-items-center">
-            <h1>{{ profile.name }}</h1>
-            <button v-if="yourProfilePage" class="btn btn-warning px-4 fs-3" type="button" title="Edit your profile">
-              <i class="mdi mdi-pen"></i>
-            </button>
+        <div class="d-md-flex gap-5 align-items-start">
+          <div class="text-center mb-4">
+            <ProfilePicture width="20rem" :profile="profile" />
+          </div>
+          <div>
+            <div class="d-flex gap-4 align-items-center">
+              <h1>{{ profile.name }}</h1>
+              <button v-if="isYourProfilePage" class="btn btn-warning px-4 fs-3" type="button" title="Edit your profile"
+                data-bs-toggle="modal" data-bs-target="#profileModal">
+                <i class="mdi mdi-pen"></i>
+              </button>
+            </div>
+            <p>{{ profile.bio }}</p>
           </div>
         </div>
-        <button v-if="yourProfilePage" class="btn btn-warning px-4 fs-3 mt-2" type="button" title="Edit your profile">
+        <button v-if="isYourProfilePage" class="btn btn-warning px-4 fs-3 mt-2" type="button" title="Edit your profile">
           <i class="mdi mdi-plus-thick"></i>
         </button>
       </div>
@@ -71,6 +79,10 @@ async function getBlogsByProfileId() {
       </div>
     </div>
   </div>
+
+  <ModalWrapper v-if="isYourProfilePage" modalId="profileModal" modalTitle="Edit Your Profile">
+    <ProfileForm />
+  </ModalWrapper>
 </template>
 
 

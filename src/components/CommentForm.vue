@@ -33,7 +33,7 @@ async function createComment() {
       <label for="body">Comment Body</label>
     </div>
     <div class="text-end">
-      <button class="btn btn-warning">Submit</button>
+      <button class="btn btn-warning" type="submit">Submit</button>
     </div>
   </form>
 </template>

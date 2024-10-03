@@ -4,6 +4,7 @@ import { logger } from '../utils/Logger'
 import { api } from './AxiosService'
 
 class AccountService {
+
   async getAccount() {
     try {
       const res = await api.get('/account')
@@ -11,6 +12,15 @@ class AccountService {
     } catch (err) {
       logger.error('HAVE YOU STARTED YOUR SERVER YET???', err)
     }
+  }
+
+  async updateAccount(accountData) {
+    const response = await api.put('/account', accountData)
+    logger.log('UPDATED ACCCOUNT', response.data)
+    const updatedAccount = new Account(response.data)
+    AppState.account = updatedAccount
+    AppState.profile = updatedAccount
+    AppState.blogs.forEach(blog => blog.creator = updatedAccount)
   }
 }
 

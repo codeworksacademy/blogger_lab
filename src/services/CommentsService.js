@@ -11,6 +11,7 @@ class CommentsService {
     AppState.comments.push(comment)
   }
   async getCommentsByBlogId(blogId) {
+    AppState.comments.length = 0
     const response = await api.get(`api/blogs/${blogId}/comments`)
     logger.log('GOT COMMENTS 🗨️🗨️🗨️', response.data)
     const comments = response.data.map(commentPOJO => new Comment(commentPOJO))
