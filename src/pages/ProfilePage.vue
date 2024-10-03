@@ -1,6 +1,7 @@
 <script setup>
 import { AppState } from '@/AppState.js';
 import BlogCard from '@/components/BlogCard.vue';
+import BlogForm from '@/components/BlogForm.vue';
 import ModalWrapper from '@/components/ModalWrapper.vue';
 import ProfileForm from '@/components/ProfileForm.vue';
 import ProfilePicture from '@/components/ProfilePicture.vue';
@@ -63,7 +64,8 @@ async function getBlogsByProfileId() {
             <p>{{ profile.bio }}</p>
           </div>
         </div>
-        <button v-if="isYourProfilePage" class="btn btn-warning px-4 fs-3 mt-2" type="button" title="Edit your profile">
+        <button v-if="isYourProfilePage" class="btn btn-warning px-4 fs-3 mt-2" type="button" title="Edit your profile"
+          data-bs-toggle="modal" data-bs-target="#blogModal">
           <i class="mdi mdi-plus-thick"></i>
         </button>
       </div>
@@ -82,6 +84,9 @@ async function getBlogsByProfileId() {
 
   <ModalWrapper v-if="isYourProfilePage" modalId="profileModal" modalTitle="Edit Your Profile">
     <ProfileForm />
+  </ModalWrapper>
+  <ModalWrapper v-if="isYourProfilePage" modalId="blogModal" modalTitle="Publish a Blog">
+    <BlogForm />
   </ModalWrapper>
 </template>
 
