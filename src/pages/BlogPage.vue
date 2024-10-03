@@ -1,5 +1,6 @@
 <script setup>
 import { AppState } from '@/AppState.js';
+import CommentCard from '@/components/CommentCard.vue';
 import CommentForm from '@/components/CommentForm.vue';
 import ModalWrapper from '@/components/ModalWrapper.vue';
 import ProfilePicture from '@/components/ProfilePicture.vue';
@@ -13,6 +14,8 @@ import { useRoute } from 'vue-router';
 const route = useRoute()
 const blog = computed(() => AppState.activeBlog)
 const account = computed(() => AppState.account)
+const comments = computed(() => AppState.comments)
+
 onMounted(() => {
   getBlogById()
   getCommentsByBlogId()
@@ -73,6 +76,9 @@ async function getCommentsByBlogId() {
             <i class="mdi mdi-plus-thick"></i>
           </button>
         </div>
+      </div>
+      <div v-for="comment in comments" :key="comment.id" class="col-12">
+        <CommentCard :comment="comment" />
       </div>
     </section>
   </div>
