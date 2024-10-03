@@ -1,7 +1,10 @@
 <script setup>
 import { AppState } from '@/AppState.js';
+import CommentForm from '@/components/CommentForm.vue';
+import ModalWrapper from '@/components/ModalWrapper.vue';
 import ProfilePicture from '@/components/ProfilePicture.vue';
 import { blogsService } from '@/services/BlogsService.js';
+import { commentsService } from '@/services/CommentsService.js';
 import { logger } from '@/utils/Logger.js';
 import Pop from '@/utils/Pop.js';
 import { computed, onMounted } from 'vue';
@@ -12,6 +15,7 @@ const blog = computed(() => AppState.activeBlog)
 const account = computed(() => AppState.account)
 onMounted(() => {
   getBlogById()
+  getCommentsByBlogId()
 })
 async function getBlogById() {
   try {
@@ -26,6 +30,7 @@ async function getBlogById() {
 async function getCommentsByBlogId() {
   try {
     const blogId = route.params.blogId
+    await commentsService.getCommentsByBlogId(blogId)
   } catch (error) {
     Pop.error(error)
   }
@@ -34,8 +39,8 @@ async function getCommentsByBlogId() {
 
 
 <template>
-  <div class="container">
-    <section v-if="blog" class="row">
+  <div v-if="blog" class="container">
+    <section class="row mb-4">
       <div class="col-12">
         <div class="rounded border border-dark border-3 px-5 py-4">
           <img :src="blog.imgUrl" :alt="'Cover image for ' + blog.title" class="blog-img rounded mb-2">
@@ -50,20 +55,38 @@ async function getCommentsByBlogId() {
                 </time>
               </h3>
             </div>
-            <button v-if="account?.id == blog.creatorId" class="btn btn-warning" type="button" title="Edit this blog">
-              <i class="mdi mdi-pen px-3 fs-4"></i>
+            <button v-if="account?.id == blog.creatorId" class="btn btn-warning px-3 fs-4" type="button"
+              title="Edit this blog">
+              <i class="mdi mdi-pen"></i>
             </button>
           </div>
           <p class="mb-0">{{ blog.body }}</p>
         </div>
       </div>
     </section>
-    <section v-else class="row">
+    <section class="row">
+      <div class="col-12 mb-3">
+        <div class="d-flex gap-4 align-items-center">
+          <h2>Comments</h2>
+          <button v-if="account" class="btn btn-warning px-3 fs-4" type="button" title="Leave a comment"
+            data-bs-toggle="modal" data-bs-target="#commentModal">
+            <i class="mdi mdi-plus-thick"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div v-else class="container">
+    <section class="row">
       <div class="col-12">
         <h1>Loading...</h1>
       </div>
     </section>
   </div>
+
+  <ModalWrapper modalId="commentModal" modalTitle="Create Comment">
+    <CommentForm />
+  </ModalWrapper>
 </template>
 
 
