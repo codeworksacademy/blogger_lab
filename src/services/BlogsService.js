@@ -4,10 +4,9 @@ import { Blog } from "@/models/Blog.js"
 import { AppState } from "@/AppState.js"
 
 class BlogsService {
-
   clearBlogs() {
     AppState.blogs.length = 0
-
+    AppState.activeBlog = null
   }
 
   async getBlogs() {
@@ -24,6 +23,14 @@ class BlogsService {
     logger.log('GOT BLOGS 📜📜📜', response.data)
     const blogs = response.data.map(blogPOJO => new Blog(blogPOJO))
     AppState.blogs = blogs
+  }
+
+  async getBlogById(blogId) {
+    this.clearBlogs()
+    const response = await api.get(`api/blogs/${blogId}`)
+    logger.log('GOT BLOG 📜', response.data)
+    const blog = new Blog(response.data)
+    AppState.activeBlog = blog
   }
 }
 

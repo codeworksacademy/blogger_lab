@@ -1,5 +1,6 @@
 <script setup>
 import { Blog } from '@/models/Blog.js';
+import ProfilePicture from './ProfilePicture.vue';
 
 defineProps({
   blog: { type: Blog, required: true }
@@ -8,13 +9,13 @@ defineProps({
 
 
 <template>
-  <RouterLink :to="'/blogs/' + blog.id">
-
+  <RouterLink :to="{ name: 'Blog Details', params: { blogId: blog.id } }" :title="`Read the ${blog.title} blog`">
     <div class="d-md-flex p-3 justify-content-between rounded border border-dark border-3 shadow text-dark">
       <div class="d-flex flex-column flex-grow-1 ">
-        <RouterLink :to="'/profiles/' + blog.creatorId" :title="`Go to ${blog.creator.name}'s profile page`">
+        <RouterLink :to="{ name: 'Profile Details', params: { profileId: blog.creatorId } }"
+          :title="`Go to ${blog.creator.name}'s profile page`">
           <div class="d-flex align-items-center gap-1 mb-1 creator-details">
-            <img :src="blog.creator.picture" :alt="`${blog.creator.name}'s profile picture'`" class="creator-img">
+            <ProfilePicture width="3rem" :profile="blog.creator" />
             <span>{{ blog.creator.name }}</span>
           </div>
         </RouterLink>
@@ -29,13 +30,6 @@ defineProps({
 
 
 <style lang="scss" scoped>
-.creator-img {
-  height: 3rem;
-  aspect-ratio: 1/1;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
 .blog-img {
   width: 100%;
   aspect-ratio: 16/9;

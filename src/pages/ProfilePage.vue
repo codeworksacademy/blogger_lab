@@ -1,6 +1,7 @@
 <script setup>
 import { AppState } from '@/AppState.js';
 import BlogCard from '@/components/BlogCard.vue';
+import ProfilePicture from '@/components/ProfilePicture.vue';
 import { blogsService } from '@/services/BlogsService.js';
 import { profilesService } from '@/services/ProfilesService.js';
 import { logger } from '@/utils/Logger.js';
@@ -46,7 +47,7 @@ async function getBlogsByProfileId() {
     <div v-if="profile" class="row mb-4">
       <div class="col-12">
         <div class="d-flex gap-5 align-items-start">
-          <img :src="profile.picture" :alt="profile.name" class="profile-img">
+          <ProfilePicture width="20rem" :profile="profile" />
           <div class="d-flex gap-4 align-items-center">
             <h1>{{ profile.name }}</h1>
             <button v-if="yourProfilePage" class="btn btn-warning px-4 fs-3" type="button" title="Edit your profile">
