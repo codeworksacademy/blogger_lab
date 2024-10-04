@@ -14,6 +14,7 @@ class AccountService {
     }
   }
 
+  /*** @param {{ id: any; email: any; name: any; picture: any; bio: any; }} accountData*/
   async updateAccount(accountData) {
     const response = await api.put('/account', accountData)
     logger.log('UPDATED ACCCOUNT', response.data)

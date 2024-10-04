@@ -4,6 +4,7 @@ import { Blog } from "@/models/Blog.js"
 import { AppState } from "@/AppState.js"
 
 class BlogsService {
+
   clearBlogs() {
     AppState.blogs.length = 0
     AppState.activeBlog = null
@@ -31,6 +32,14 @@ class BlogsService {
     logger.log('GOT BLOG 📜', response.data)
     const blog = new Blog(response.data)
     AppState.activeBlog = blog
+  }
+
+  async createBlog(blogData) {
+    const response = await api.post('api/blogs', blogData)
+    logger.log('CREATED BLOG ✨📜', response.data)
+    const newBlog = new Blog(response.data)
+    AppState.blogs.push(newBlog)
+    return newBlog
   }
 }
 

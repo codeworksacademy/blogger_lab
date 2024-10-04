@@ -5,10 +5,9 @@ defineProps({
   modalSize: {
     type: String,
     default: '',
+    /** @param {string} value */
     validator(value) {
-      const validSizes = ['modal-sm', 'modal-lg', 'modal-xl', '']
-      // @ts-ignore
-      return validSizes.includes(value)
+      return ['success', 'warning', 'danger'].includes(value)
     }
   },
   showFooter: { type: Boolean, default: false }

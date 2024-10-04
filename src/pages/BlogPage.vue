@@ -1,5 +1,6 @@
 <script setup>
 import { AppState } from '@/AppState.js';
+import BlogForm from '@/components/BlogForm.vue';
 import CommentCard from '@/components/CommentCard.vue';
 import CommentForm from '@/components/CommentForm.vue';
 import ModalWrapper from '@/components/ModalWrapper.vue';
@@ -64,10 +65,21 @@ async function getCommentsByBlogId() {
                 </time>
               </h3>
             </div>
-            <button v-if="account?.id == blog.creatorId" class="btn btn-warning px-3 fs-4" type="button"
+            <div v-if="account?.id == blog.creatorId" class="dropdown">
+              <button class="btn btn-warning dropdown-toggle fs-5" type="button" title="Blog Options"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="mdi mdi-pen"></i>
+              </button>
+              <ul class="dropdown-menu">
+                <li><button class="dropdown-item" type="button">Edit Blog Details</button></li>
+                <li><button class="dropdown-item" type="button">Edit Blog Body</button></li>
+                <li><button class="dropdown-item text-danger" type="button">Delete Blog</button></li>
+              </ul>
+            </div>
+            <!-- <button v-if="account?.id == blog.creatorId" class="btn btn-warning px-3 fs-4" type="button"
               title="Edit this blog">
               <i class="mdi mdi-pen"></i>
-            </button>
+            </button> -->
           </div>
           <p class="mb-0">{{ blog.body }}</p>
         </div>
@@ -98,6 +110,9 @@ async function getCommentsByBlogId() {
 
   <ModalWrapper modalId="commentModal" modalTitle="Create Comment">
     <CommentForm />
+  </ModalWrapper>
+  <ModalWrapper modalId="blogModal" modalTitle="Edit Blog">
+    <BlogForm />
   </ModalWrapper>
 </template>
 
