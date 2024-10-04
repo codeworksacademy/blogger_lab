@@ -1,21 +1,24 @@
 <script setup>
 import { AppState } from '@/AppState.js';
+import BlogBodyForm from '@/components/BlogBodyForm.vue';
 import BlogForm from '@/components/BlogForm.vue';
 import CommentCard from '@/components/CommentCard.vue';
 import CommentForm from '@/components/CommentForm.vue';
 import ModalWrapper from '@/components/ModalWrapper.vue';
 import ProfilePicture from '@/components/ProfilePicture.vue';
+import { router } from '@/router.js';
 import { blogsService } from '@/services/BlogsService.js';
 import { commentsService } from '@/services/CommentsService.js';
 import { logger } from '@/utils/Logger.js';
 import Pop from '@/utils/Pop.js';
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute()
 const blog = computed(() => AppState.activeBlog)
 const account = computed(() => AppState.account)
 const comments = computed(() => AppState.comments)
+const showBodyEditForm = ref(false)
 
 onMounted(() => {
   getBlogById()
@@ -37,6 +40,20 @@ async function getCommentsByBlogId() {
     await commentsService.getCommentsByBlogId(blogId)
   } catch (error) {
     Pop.error(error)
+    logger.error(error)
+  }
+}
+
+async function deleteBlog() {
+  try {
+    const wantsToDelete = await Pop.confirm(`Are you sure that you want to delete the ${blog.value.title} blog?`)
+    if (!wantsToDelete) return
+
+    await blogsService.deleteBlog(blog.value.id)
+    router.push({ name: 'Profile Details', params: { profileId: blog.value.creatorId } })
+  } catch (error) {
+    Pop.error(error)
+    logger.error(error)
   }
 }
 </script>
@@ -50,14 +67,14 @@ async function getCommentsByBlogId() {
           <img :src="blog.imgUrl" :alt="'Cover image for ' + blog.title" class="blog-img rounded mb-2">
           <div class="d-flex gap-4 align-items-start mb-3">
             <RouterLink :to="{ name: 'Profile Details', params: { profileId: blog.creatorId } }"
-              :title="`Go to ${blog.creator.name}'s profile page`">
+              :title="`Go to ${blog.creator.name}'s profile page`" class="d-none d-md-inline">
               <ProfilePicture width="10rem" :profile="blog.creator" />
             </RouterLink>
             <div class="flex-grow-1">
               <h1>{{ blog.title }}</h1>
               <RouterLink :to="{ name: 'Profile Details', params: { profileId: blog.creatorId } }"
-                :title="`Go to ${blog.creator.name}'s profile page`">
-                <h2 class="fs-4">by {{ blog.creator.name }}</h2>
+                :title="`Go to ${blog.creator.name}'s profile page`" class="creator-name">
+                <h2 class="fs-4 ">by {{ blog.creator.name }}</h2>
               </RouterLink>
               <h3 class="fs-4">Last updated:
                 <time :datetime="blog.updatedAt.toLocaleDateString()">
@@ -71,17 +88,26 @@ async function getCommentsByBlogId() {
                 <i class="mdi mdi-pen"></i>
               </button>
               <ul class="dropdown-menu">
-                <li><button class="dropdown-item" type="button">Edit Blog Details</button></li>
-                <li><button class="dropdown-item" type="button">Edit Blog Body</button></li>
-                <li><button class="dropdown-item text-danger" type="button">Delete Blog</button></li>
+                <li>
+                  <button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#blog-modal">Edit
+                    Blog Details
+                  </button>
+                </li>
+                <li>
+                  <button @click="showBodyEditForm = !showBodyEditForm" class="dropdown-item" type="button">
+                    {{ showBodyEditForm ? 'Exit Edit Mode' : 'Edit Blog Body' }}
+                  </button>
+                </li>
+                <li>
+                  <button @click="deleteBlog()" class="dropdown-item text-danger" type="button">
+                    Delete Blog
+                  </button>
+                </li>
               </ul>
             </div>
-            <!-- <button v-if="account?.id == blog.creatorId" class="btn btn-warning px-3 fs-4" type="button"
-              title="Edit this blog">
-              <i class="mdi mdi-pen"></i>
-            </button> -->
           </div>
-          <p class="mb-0">{{ blog.body }}</p>
+          <BlogBodyForm v-if="showBodyEditForm" @updated="showBodyEditForm = false" />
+          <p v-else class="mb-0">{{ blog.body }}</p>
         </div>
       </div>
     </section>
@@ -90,7 +116,7 @@ async function getCommentsByBlogId() {
         <div class="d-flex gap-4 align-items-center">
           <h2>Comments</h2>
           <button v-if="account" class="btn btn-warning px-3 fs-4" type="button" title="Leave a comment"
-            data-bs-toggle="modal" data-bs-target="#commentModal">
+            data-bs-toggle="modal" data-bs-target="#comment-modal">
             <i class="mdi mdi-plus-thick"></i>
           </button>
         </div>
@@ -108,10 +134,10 @@ async function getCommentsByBlogId() {
     </section>
   </div>
 
-  <ModalWrapper modalId="commentModal" modalTitle="Create Comment">
+  <ModalWrapper modalId="comment-modal" modalTitle="Create Comment">
     <CommentForm />
   </ModalWrapper>
-  <ModalWrapper modalId="blogModal" modalTitle="Edit Blog">
+  <ModalWrapper modalId="blog-modal" modalTitle="Edit Blog">
     <BlogForm />
   </ModalWrapper>
 </template>
@@ -122,5 +148,10 @@ async function getCommentsByBlogId() {
   width: 100%;
   height: 50dvh;
   object-fit: cover;
+}
+
+.creator-name {
+  display: inline-block;
+  width: fit-content;
 }
 </style>

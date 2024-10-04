@@ -29,8 +29,8 @@ async function createComment() {
   <form @submit.prevent="createComment()">
     <div class="form-floating mb-3">
       <textarea v-model="editableCommentData.body" class="form-control" placeholder="Leave a comment here" required
-        maxlength="500" id="body"></textarea>
-      <label for="body">Comment Body</label>
+        maxlength="500" id="comment-body"></textarea>
+      <label for="comment-body">Comment Body</label>
     </div>
     <div class="text-end">
       <button class="btn btn-warning" type="submit">Submit</button>

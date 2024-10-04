@@ -11,6 +11,7 @@ const router = useRouter()
 const blog = computed(() => AppState.activeBlog)
 
 const editableBlogData = ref({
+  id: '',
   title: '',
   body: ' ',
   imgUrl: '',
@@ -36,35 +37,48 @@ function removeTag(index) {
 async function createBlog() {
   try {
     const blog = await blogsService.createBlog(editableBlogData.value)
-    Modal.getInstance('#blogModal').hide()
+    Modal.getInstance('#blog-modal').hide()
     router.push({ name: 'Blog Details', params: { blogId: blog.id } })
   } catch (error) {
     Pop.error(error)
     logger.error(error)
   }
 }
+async function updateBlog() {
+  try {
+    await blogsService.updateBlog(editableBlogData.value)
+    Modal.getInstance('#blog-modal').hide()
+  } catch (error) {
+    Pop.error(error)
+    logger.error(error)
+  }
+}
+
+function handleSubmit() {
+  editableBlogData.value.id ? updateBlog() : createBlog()
+}
 </script>
 
 
 <template>
-  <form id="blog-form" @submit.prevent="createBlog()">
+  <form id="blog-form" @submit.prevent="handleSubmit()">
     <div class="form-floating mb-3">
-      <input v-model="editableBlogData.title" type="text" class="form-control" id="title" placeholder="Blog Title..."
-        required maxlength="100">
-      <label for="title">Blog Title</label>
+      <input v-model="editableBlogData.title" type="text" class="form-control" id="blog-title"
+        placeholder="Blog blog-Title..." required maxlength="100">
+      <label for="blog-title">Blog Title</label>
     </div>
     <div class="form-floating mb-3">
-      <input v-model="editableBlogData.imgUrl" type="url" class="form-control" id="imgUrl" placeholder="Blog ImgUrl..."
-        required maxlength="500">
-      <label for="imgUrl">Blog ImgUrl</label>
+      <input v-model="editableBlogData.imgUrl" type="url" class="form-control" id="blog-img-url"
+        placeholder="Blog ImgUrl..." required maxlength="500">
+      <label for="blog-img-url">Blog ImgUrl</label>
     </div>
     <div v-if="editableBlogData.imgUrl" class="mb-3">
       <p>Image Preview</p>
       <img :src="editableBlogData.imgUrl" alt="Your blog image" class="w-100">
     </div>
     <div class="mb-3 form-check">
-      <input v-model="editableBlogData.published" type="checkbox" class="form-check-input" id="published">
-      <label class="form-check-label" for="published">Publish this blog?</label>
+      <input v-model="editableBlogData.published" type="checkbox" class="form-check-input" id="blog-published">
+      <label class="form-check-label" for="blog-published">Publish this blog?</label>
     </div>
   </form>
   <form @submit.prevent="addTag()">

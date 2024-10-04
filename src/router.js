@@ -1,3 +1,4 @@
+import { authSettled } from '@bcwdev/auth0provider-client'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 function loadPage(page) {
@@ -13,12 +14,14 @@ const routes = [
   {
     path: '/profiles/:profileId',
     name: 'Profile Details',
-    component: loadPage('ProfilePage')
+    component: loadPage('ProfilePage'),
+    beforeEnter: authSettled
   },
   {
     path: '/blogs/:blogId',
     name: 'Blog Details',
-    component: loadPage('BlogPage')
+    component: loadPage('BlogPage'),
+    beforeEnter: authSettled
   }
 ]
 

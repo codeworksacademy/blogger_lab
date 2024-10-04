@@ -4,6 +4,10 @@ import { Blog } from "@/models/Blog.js"
 import { AppState } from "@/AppState.js"
 
 class BlogsService {
+  async deleteBlog(blogId) {
+    const response = await api.delete(`api/blogs/${blogId}`)
+    logger.log('DELETED BLOG 💣📜', response.data)
+  }
 
   clearBlogs() {
     AppState.blogs.length = 0
@@ -40,6 +44,13 @@ class BlogsService {
     const newBlog = new Blog(response.data)
     AppState.blogs.push(newBlog)
     return newBlog
+  }
+
+  async updateBlog(blogData) {
+    const response = await api.put(`api/blogs/${blogData.id}`, blogData)
+    logger.log('UPDATED BLOG', response.data)
+    const updatedBlog = new Blog(response.data)
+    AppState.activeBlog = updatedBlog
   }
 }
 

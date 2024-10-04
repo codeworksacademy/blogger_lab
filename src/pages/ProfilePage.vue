@@ -57,7 +57,7 @@ async function getBlogsByProfileId() {
             <div class="d-flex gap-4 align-items-center">
               <h1>{{ profile.name }}</h1>
               <button v-if="isYourProfilePage" class="btn btn-warning px-4 fs-3" type="button" title="Edit your profile"
-                data-bs-toggle="modal" data-bs-target="#profileModal">
+                data-bs-toggle="modal" data-bs-target="#profile-modal">
                 <i class="mdi mdi-pen"></i>
               </button>
             </div>
@@ -65,7 +65,7 @@ async function getBlogsByProfileId() {
           </div>
         </div>
         <button v-if="isYourProfilePage" class="btn btn-warning px-4 fs-3 mt-2" type="button" title="Edit your profile"
-          data-bs-toggle="modal" data-bs-target="#blogModal">
+          data-bs-toggle="modal" data-bs-target="#blog-modal">
           <i class="mdi mdi-plus-thick"></i>
         </button>
       </div>
@@ -82,10 +82,10 @@ async function getBlogsByProfileId() {
     </div>
   </div>
 
-  <ModalWrapper v-if="isYourProfilePage" modalId="profileModal" modalTitle="Edit Your Profile">
+  <ModalWrapper v-if="isYourProfilePage" modalId="profile-modal" modalTitle="Edit Your Profile">
     <ProfileForm />
   </ModalWrapper>
-  <ModalWrapper v-if="isYourProfilePage" modalId="blogModal" modalTitle="Publish a Blog">
+  <ModalWrapper v-if="isYourProfilePage" modalId="blog-modal" modalTitle="Publish a Blog">
     <BlogForm />
   </ModalWrapper>
 </template>

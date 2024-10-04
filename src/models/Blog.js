@@ -2,7 +2,7 @@ import { Account } from "./Account.js"
 
 export class Blog {
   constructor(data) {
-    this.id = data.id
+    this.id = data.id ?? data._id
     this.title = data.title
     this.body = data.body
     this.imgUrl = data.imgUrl
