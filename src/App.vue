@@ -11,13 +11,16 @@ import { AppState } from './AppState.js';
   <main>
     <router-view />
   </main>
-  <footer class="bg-dark text-light">
-    Made with 💖 by CodeWorks
+  <footer class="bg-warning">
+    <span>
+      Made with <i class="mdi mdi-heart"></i> by CodeWorks
+    </span>
   </footer>
 </template>
 
 <style lang="scss">
 @import '@/assets/scss/main.scss';
+
 :root {
   --main-height: calc(100vh - 32px - 64px);
 }

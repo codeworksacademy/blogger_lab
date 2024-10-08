@@ -138,7 +138,10 @@ async function deleteBlog() {
           </button>
         </div>
       </div>
-      <div v-for="comment in comments" :key="comment.id" class="col-12 mb-3">
+      <div v-if="comments.length == 0">
+        <h3>Be the first to leave a comment!</h3>
+      </div>
+      <div v-else v-for="comment in comments" :key="comment.id" class="col-12 mb-3">
         <CommentCard :comment="comment" />
       </div>
     </section>

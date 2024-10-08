@@ -36,7 +36,7 @@ async function deleteComment() {
     </div>
     <div class="flex-grow-1">
       <div>
-        <div class="d-flex gap-2 align-items-center">
+        <div class="d-flex gap-2 align-items-center justify-content-between">
           <RouterLink :to="{ name: 'Profile Details', params: { profileId: comment.creatorId } }"
             :title="`Go to ${comment.creator.name}'s profile page`">
             <span class="fs-3 fw-bold">{{ comment.creator.name }}</span>
