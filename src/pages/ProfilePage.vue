@@ -64,7 +64,7 @@ async function getBlogsByProfileId() {
             <p>{{ profile.bio }}</p>
           </div>
         </div>
-        <button v-if="isYourProfilePage" class="btn btn-warning px-4 fs-3 mt-2" type="button" title="Edit your profile"
+        <button v-if="isYourProfilePage" class="btn btn-warning px-4 fs-3 mt-2" type="button" title="Create a new blog"
           data-bs-toggle="modal" data-bs-target="#blog-modal">
           <i class="mdi mdi-plus-thick"></i>
         </button>
@@ -72,7 +72,7 @@ async function getBlogsByProfileId() {
     </div>
     <div v-else class="row mb-4">
       <div class="col-12">
-        <h1>Loading...</h1>
+        <h1>Loading... <i class="mdi mdi-loading mdi-spin"></i></h1>
       </div>
     </div>
     <div class="row">
@@ -85,7 +85,7 @@ async function getBlogsByProfileId() {
   <ModalWrapper v-if="isYourProfilePage" modalId="profile-modal" modalTitle="Edit Your Profile">
     <ProfileForm />
   </ModalWrapper>
-  <ModalWrapper v-if="isYourProfilePage" modalId="blog-modal" modalTitle="Publish a Blog">
+  <ModalWrapper v-if="isYourProfilePage" modalId="blog-modal" modalTitle="Start a Blog">
     <BlogForm />
   </ModalWrapper>
 </template>

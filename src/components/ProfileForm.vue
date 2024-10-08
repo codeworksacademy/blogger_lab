@@ -19,7 +19,7 @@ watch(account, () => {
 async function updateAccount() {
   try {
     await accountService.updateAccount(editableAccountData.value)
-    Modal.getInstance('#profileModal').hide()
+    Modal.getInstance('#profile-modal').hide()
   }
   catch (error) {
     Pop.error(error);
@@ -44,7 +44,7 @@ async function updateAccount() {
     <div class="form-floating mb-3">
       <textarea v-model="editableAccountData.bio" class="form-control" placeholder="Profile Bio..." required
         maxlength="1000" id="body"></textarea>
-      <label for="body">Comment Body</label>
+      <label for="body">Profile Bio</label>
     </div>
     <div class="text-end">
       <button class="btn btn-warning" type="submit">Submit</button>

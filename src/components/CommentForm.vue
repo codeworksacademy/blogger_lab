@@ -16,7 +16,7 @@ async function createComment() {
   try {
     await commentsService.createComment(editableCommentData.value)
     editableCommentData.value.body = ''
-    Modal.getInstance('#commentModal').hide()
+    Modal.getInstance('#comment-modal').hide()
   } catch (error) {
     Pop.error(error)
     logger.error(error)

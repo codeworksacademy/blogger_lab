@@ -7,7 +7,7 @@ defineProps({
     default: '',
     /** @param {string} value */
     validator(value) {
-      return ['success', 'warning', 'danger'].includes(value)
+      return ['modal-sm', 'modal-lg', 'modal-xl', ''].includes(value)
     }
   },
   showFooter: { type: Boolean, default: false }

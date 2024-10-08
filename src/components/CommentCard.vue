@@ -1,10 +1,28 @@
 <script setup>
 import { Comment } from '@/models/Comment.js';
 import ProfilePicture from './ProfilePicture.vue';
+import Pop from '@/utils/Pop.js';
+import { logger } from '@/utils/Logger.js';
+import { commentsService } from '@/services/CommentsService.js';
+import { computed } from 'vue';
+import { AppState } from '@/AppState.js';
 
-defineProps({
+const props = defineProps({
   comment: { type: Comment, required: true }
 })
+const account = computed(() => AppState.account)
+
+async function deleteComment() {
+  try {
+    const wantsToDelete = await Pop.confirm('Are you sure that you want to delete your comment?')
+    if (!wantsToDelete) return
+    await commentsService.deleteComment(props.comment.id)
+    Pop.success('Comment was deleted')
+  } catch (error) {
+    Pop.error(error)
+    logger.error(error)
+  }
+}
 </script>
 
 
@@ -18,10 +36,16 @@ defineProps({
     </div>
     <div class="flex-grow-1">
       <div>
-        <RouterLink :to="{ name: 'Profile Details', params: { profileId: comment.creatorId } }"
-          :title="`Go to ${comment.creator.name}'s profile page`">
-          <span class="fs-3 fw-bold">{{ comment.creator.name }}</span>
-        </RouterLink>
+        <div class="d-flex gap-2 align-items-center">
+          <RouterLink :to="{ name: 'Profile Details', params: { profileId: comment.creatorId } }"
+            :title="`Go to ${comment.creator.name}'s profile page`">
+            <span class="fs-3 fw-bold">{{ comment.creator.name }}</span>
+          </RouterLink>
+          <button v-if="comment.creatorId == account?.id" @click="deleteComment()" class="btn btn-outline-danger"
+            title="Delete this comment">
+            <i class="mdi mdi-close-thick"></i>
+          </button>
+        </div>
         <span class="d-md-none">
           <ProfilePicture width="3rem" :profile="comment.creator" />
         </span>

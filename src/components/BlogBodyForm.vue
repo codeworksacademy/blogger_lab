@@ -7,7 +7,7 @@ import { computed, ref } from 'vue';
 
 const blog = computed(() => AppState.activeBlog)
 
-const emit = defineEmits(['updated'])
+const emit = defineEmits(['updated-blog'])
 
 const editableBlogData = ref({
   body: blog.value.body,
@@ -18,7 +18,7 @@ async function updateBlog() {
   try {
     await blogsService.updateBlog(editableBlogData.value)
     Pop.success("Save Successful")
-    emit('updated')
+    emit('updated-blog')
   } catch (error) {
     Pop.error(error)
     logger.error(error)
@@ -41,4 +41,9 @@ async function updateBlog() {
 </template>
 
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+textarea {
+  height: 80dvh !important;
+  overflow-y: auto;
+}
+</style>

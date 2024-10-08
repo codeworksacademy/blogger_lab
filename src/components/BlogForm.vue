@@ -13,7 +13,6 @@ const blog = computed(() => AppState.activeBlog)
 const editableBlogData = ref({
   id: '',
   title: '',
-  body: ' ',
   imgUrl: '',
   tags: [],
   published: true
@@ -69,7 +68,7 @@ function handleSubmit() {
     </div>
     <div class="form-floating mb-3">
       <input v-model="editableBlogData.imgUrl" type="url" class="form-control" id="blog-img-url"
-        placeholder="Blog ImgUrl..." required maxlength="500">
+        placeholder="Blog ImgUrl..." maxlength="500">
       <label for="blog-img-url">Blog ImgUrl</label>
     </div>
     <div v-if="editableBlogData.imgUrl" class="mb-3">
@@ -81,19 +80,19 @@ function handleSubmit() {
       <label class="form-check-label" for="blog-published">Publish this blog?</label>
     </div>
   </form>
-  <form @submit.prevent="addTag()">
+  <form @submit.prevent="addTag()" id="tag-form">
     <div class="input-group mb-3">
       <input v-model="tag" type="text" class="form-control" placeholder="Add a tag to your blog"
-        aria-label="Add a tag to your blog" aria-describedby="tags" maxlength="50">
-      <button class="btn btn-outline-secondary" type="submit" id="tags" title="Add tag">
-        <i class="mdi mdi-plus-thick"></i>
+        aria-label="Add a tag to your blog" aria-describedby="tags" maxlength="50" minlength="1" required>
+      <button class="btn btn-outline-secondary" type="submit" form="tag-form" title="Add tag">
+        <i class="mdi mdi-tag-plus"></i>
       </button>
     </div>
   </form>
   <div class="d-flex flex-wrap gap-2">
     <span v-for="(tag, index) in editableBlogData.tags" :key="tag" @click="removeTag(index)"
-      class="bg-light px-1 border border-1 border-dark" role="button" :title="`Remove '${tag}' from tags`">
-      <i class="mdi mdi-close-circle"></i>
+      class="bg-light px-1 border border-1 border-dark tag" role="button" :title="`Remove '${tag}' from tags`">
+      <i class="mdi mdi-tag-remove"></i>
       {{ tag }}
     </span>
   </div>
@@ -103,4 +102,8 @@ function handleSubmit() {
 </template>
 
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.tag:hover>.mdi-tag-remove {
+  color: var(--bs-danger)
+}
+</style>

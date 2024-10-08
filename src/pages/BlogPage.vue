@@ -6,15 +6,15 @@ import CommentCard from '@/components/CommentCard.vue';
 import CommentForm from '@/components/CommentForm.vue';
 import ModalWrapper from '@/components/ModalWrapper.vue';
 import ProfilePicture from '@/components/ProfilePicture.vue';
-import { router } from '@/router.js';
 import { blogsService } from '@/services/BlogsService.js';
 import { commentsService } from '@/services/CommentsService.js';
 import { logger } from '@/utils/Logger.js';
 import Pop from '@/utils/Pop.js';
 import { computed, onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute()
+const router = useRouter()
 const blog = computed(() => AppState.activeBlog)
 const account = computed(() => AppState.account)
 const comments = computed(() => AppState.comments)
@@ -24,16 +24,21 @@ onMounted(() => {
   getBlogById()
   getCommentsByBlogId()
 })
+
 async function getBlogById() {
   try {
     const blogId = route.params.blogId
     await blogsService.getBlogById(blogId)
   }
   catch (error) {
-    Pop.error(error);
+    Pop.error(error)
     logger.error(error)
+    if (error.response?.status == 403) {
+      router.push({ name: 'Home' })
+    }
   }
 }
+
 async function getCommentsByBlogId() {
   try {
     const blogId = route.params.blogId
@@ -41,6 +46,9 @@ async function getCommentsByBlogId() {
   } catch (error) {
     Pop.error(error)
     logger.error(error)
+    if (error.response?.status == 403) {
+      router.push({ name: 'Home' })
+    }
   }
 }
 
@@ -63,7 +71,7 @@ async function deleteBlog() {
   <div v-if="blog" class="container">
     <section class="row mb-4">
       <div class="col-12">
-        <div class="rounded border border-dark border-3 px-5 py-4">
+        <div class="rounded border border-dark border-3 px-md-5 px-2 py-4">
           <img :src="blog.imgUrl" :alt="'Cover image for ' + blog.title" class="blog-img rounded mb-2">
           <div class="d-flex gap-4 align-items-start mb-3">
             <RouterLink :to="{ name: 'Profile Details', params: { profileId: blog.creatorId } }"
@@ -71,7 +79,16 @@ async function deleteBlog() {
               <ProfilePicture width="10rem" :profile="blog.creator" />
             </RouterLink>
             <div class="flex-grow-1">
-              <h1>{{ blog.title }}</h1>
+              <h1>
+                {{ blog.title }}
+                <i v-if="!blog.published" class="mdi mdi-book-lock" title="This blog is not published"></i>
+              </h1>
+              <div class="d-flex flex-wrap gap-1 mb-2">
+                <span v-for="tag in blog.tags" :key="tag" class="border border-1 border-dark px-1">
+                  <i class="mdi mdi-tag"></i>
+                  {{ tag }}
+                </span>
+              </div>
               <RouterLink :to="{ name: 'Profile Details', params: { profileId: blog.creatorId } }"
                 :title="`Go to ${blog.creator.name}'s profile page`" class="creator-name">
                 <h2 class="fs-4 ">by {{ blog.creator.name }}</h2>
@@ -106,7 +123,7 @@ async function deleteBlog() {
               </ul>
             </div>
           </div>
-          <BlogBodyForm v-if="showBodyEditForm" @updated="showBodyEditForm = false" />
+          <BlogBodyForm v-if="showBodyEditForm" @updated-blog="showBodyEditForm = false" />
           <p v-else class="mb-0">{{ blog.body }}</p>
         </div>
       </div>
@@ -129,7 +146,7 @@ async function deleteBlog() {
   <div v-else class="container">
     <section class="row">
       <div class="col-12">
-        <h1>Loading...</h1>
+        <h1>Loading... <i class="mdi mdi-loading mdi-spin"></i></h1>
       </div>
     </section>
   </div>
