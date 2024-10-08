@@ -7,7 +7,7 @@ import { computed, ref } from 'vue';
 
 const blog = computed(() => AppState.activeBlog)
 
-const emit = defineEmits(['updated-blog'])
+const emit = defineEmits(['blog-edit-completed'])
 
 const editableBlogData = ref({
   body: blog.value.body,
@@ -18,11 +18,25 @@ async function updateBlog() {
   try {
     await blogsService.updateBlog(editableBlogData.value)
     Pop.success("Save Successful")
-    emit('updated-blog')
+    emit('blog-edit-completed')
   } catch (error) {
     Pop.error(error)
     logger.error(error)
   }
+}
+
+async function cancelUpdate() {
+  if (editableBlogData.value.body == blog.value.body) {
+    emit('blog-edit-completed')
+    return
+  }
+
+  const wantsToDiscard = await Pop.confirm("Are you sure that you want to discard the changes that you've made?")
+
+  if (!wantsToDiscard) return
+
+  editableBlogData.value.body = blog.value.body
+  emit('blog-edit-completed')
 }
 </script>
 
@@ -35,6 +49,7 @@ async function updateBlog() {
       <label for="blog-body">Blog Body</label>
     </div>
     <div class="text-end">
+      <button @click="cancelUpdate()" class="btn btn-success me-3" type="button">Cancel</button>
       <button class="btn btn-warning" type="submit">Save</button>
     </div>
   </form>

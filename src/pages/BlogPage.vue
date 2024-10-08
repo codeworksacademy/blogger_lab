@@ -123,7 +123,7 @@ async function deleteBlog() {
               </ul>
             </div>
           </div>
-          <BlogBodyForm v-if="showBodyEditForm" @updated-blog="showBodyEditForm = false" />
+          <BlogBodyForm v-if="showBodyEditForm" @blog-edit-completed="showBodyEditForm = false" />
           <p v-else class="mb-0">{{ blog.body }}</p>
         </div>
       </div>
