@@ -89,7 +89,7 @@ function handleSubmit() {
       </button>
     </div>
   </form>
-  <div class="d-flex flex-wrap gap-2">
+  <div class="d-flex flex-wrap gap-2 mb-3">
     <span v-for="(tag, index) in editableBlogData.tags" :key="tag" @click="removeTag(index)"
       class="bg-light px-1 border border-1 border-dark tag" role="button" :title="`Remove '${tag}' from tags`">
       <i class="mdi mdi-tag-remove"></i>

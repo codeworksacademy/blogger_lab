@@ -41,8 +41,8 @@ async function deleteComment() {
             :title="`Go to ${comment.creator.name}'s profile page`">
             <span class="fs-3 fw-bold">{{ comment.creator.name }}</span>
           </RouterLink>
-          <button v-if="comment.creatorId == account?.id" @click="deleteComment()" class="btn btn-outline-danger"
-            title="Delete this comment">
+          <button v-if="comment.creatorId == account?.id" @click="deleteComment()"
+            class="btn btn-outline-danger delete-comment" title="Delete this comment">
             <i class="mdi mdi-close-thick"></i>
           </button>
         </div>
@@ -56,4 +56,13 @@ async function deleteComment() {
 </template>
 
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.delete-comment {
+  opacity: 0;
+  transition: all .5s ease-in-out;
+}
+
+.rounded:hover .delete-comment {
+  opacity: unset;
+}
+</style>

@@ -1,6 +1,7 @@
 <script setup>
 import { Blog } from '@/models/Blog.js';
 import ProfilePicture from './ProfilePicture.vue';
+import { RouterLink } from 'vue-router';
 
 defineProps({
   blog: { type: Blog, required: true }
