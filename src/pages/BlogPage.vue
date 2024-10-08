@@ -124,7 +124,7 @@ async function deleteBlog() {
             </div>
           </div>
           <BlogBodyForm v-if="showBodyEditForm" @blog-edit-completed="showBodyEditForm = false" />
-          <p v-else class="mb-0">{{ blog.body }}</p>
+          <p v-for="paragraph in blog.body.split('\n')" :key="paragraph">{{ paragraph }}</p>
         </div>
       </div>
     </section>
@@ -170,5 +170,9 @@ async function deleteBlog() {
 .creator-name {
   display: inline-block;
   width: fit-content;
+}
+
+p {
+  word-wrap: break-word;
 }
 </style>
