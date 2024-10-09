@@ -40,15 +40,15 @@ async function deleteComment() {
           <RouterLink :to="{ name: 'Profile Details', params: { profileId: comment.creatorId } }"
             :title="`Go to ${comment.creator.name}'s profile page`">
             <span class="fs-3 fw-bold">{{ comment.creator.name }}</span>
+            <span class="d-md-none">
+              <ProfilePicture width="3rem" :profile="comment.creator" />
+            </span>
           </RouterLink>
           <button v-if="comment.creatorId == account?.id" @click="deleteComment()"
             class="btn btn-outline-danger delete-comment" title="Delete this comment">
             <i class="mdi mdi-close-thick"></i>
           </button>
         </div>
-        <span class="d-md-none">
-          <ProfilePicture width="3rem" :profile="comment.creator" />
-        </span>
       </div>
       <p>{{ comment.body }}</p>
     </div>
