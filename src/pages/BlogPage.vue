@@ -72,7 +72,8 @@ async function deleteBlog() {
     <section class="row mb-4">
       <div class="col-12">
         <div class="rounded border border-dark border-3 px-md-5 px-2 py-4">
-          <img :src="blog.imgUrl" :alt="'Cover image for ' + blog.title" class="blog-img rounded mb-2">
+          <img v-if="blog.imgUrl" :src="blog.imgUrl" :alt="'Cover image for ' + blog.title"
+            class="blog-img rounded mb-2">
           <div class="d-flex gap-4 align-items-start mb-3">
             <RouterLink :to="{ name: 'Profile Details', params: { profileId: blog.creatorId } }"
               :title="`Go to ${blog.creator.name}'s profile page`" class="d-none d-md-inline">
