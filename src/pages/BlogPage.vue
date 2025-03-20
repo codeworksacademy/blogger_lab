@@ -124,7 +124,7 @@ async function deleteBlog() {
             </div>
           </div>
           <BlogBodyForm v-if="showBodyEditForm" @blog-edit-completed="showBodyEditForm = false" />
-          <p v-else v-for="paragraph in blog.body.split('\n')" :key="paragraph">{{ paragraph }}</p>
+          <p v-else v-for="paragraph in blog.body?.split('\n')" :key="paragraph">{{ paragraph }}</p>
         </div>
       </div>
     </section>

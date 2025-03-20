@@ -25,7 +25,7 @@ watch(blog, () => {
 const tag = ref('')
 
 function addTag() {
-  editableBlogData.value.tags.push(tag.value)
+  editableBlogData.value.tags.push(tag.value.toLowerCase())
   tag.value = ''
 }
 
@@ -83,8 +83,9 @@ function handleSubmit() {
   <form @submit.prevent="addTag()" id="tag-form">
     <div class="input-group mb-3">
       <input v-model="tag" type="text" class="form-control" placeholder="Add a tag to your blog"
-        aria-label="Add a tag to your blog" aria-describedby="tags" maxlength="50" minlength="1" required>
-      <button class="btn btn-outline-secondary" type="submit" form="tag-form" title="Add tag">
+        aria-label="Add a tag to your blog" aria-describedby="tags" maxlength="50" required>
+      <button :disabled="editableBlogData.tags.includes(tag.toLowerCase())" class="btn btn-outline-secondary"
+        type="submit" form="tag-form" title="Add tag">
         <i class="mdi mdi-tag-plus"></i>
       </button>
     </div>
